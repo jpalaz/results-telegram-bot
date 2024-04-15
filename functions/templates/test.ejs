@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 3.5em;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .table-container {
+      border: 2px solid #f00; /* Red outer border */
+      border-radius: 10px; /* Rounded outer border */
+      overflow: hidden; /* Ensure rounded corners are visible */
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border-radius: 5px; /* Rounded cell borders */
+    }
+
+    th {
+      background-color: #000;
+      color: #f00; /* Red text color */
+    }
+
+    #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background-color: #333;
+      color: #fff;
+    }
+
+    #header img {
+      max-height: 40px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header">
+    <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_2x_r5.png" alt="Logo">
+    <h2><%= sessionName %>, <%= sessionLocation %></h2>
+    <span class="fi fi-bh"></span>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Гоншчык</th>
+          <th>Каманда</th>
+          <th>Q1</th>
+          <th>Q2</th>
+          <th>Q3</th>
+          <th>Адрыў</th>
+          <th>Колы</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% for(var i = 0; i < drivers.length; i++) { %>
+        <tr id="driver1">
+          <td><%= (i + 1) %></td>
+          <td><%= drivers[i].name %></td>
+          <td><%= drivers[i].teamName %></td>
+          <td><%= drivers[i].q1Time %></td>
+          <td><%= drivers[i].q2Time %></td>
+          <td><%= drivers[i].q3Time %></td>
+          <td><%= drivers[i].gap %></td>
+          <td><%= drivers[i].laps %></td>
+        </tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>FP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<link href="https://fonts.googleapis.com/css?family=Fredoka" rel="stylesheet">-->
+  <!--<link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet">-->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.1.0/css/flag-icons.min.css"/>
+  <%-
+        '<style>'
+        + include(`./../public/bootstrap.min.css`)
+        + include(`./../public/my-style.css`)
+        + '</style>'
+  %>
+</head>
+<body data-bs-theme="dark">
+<div id="parent-container" class="">
+  <div class="container-fluid pt-3 border border-white border-bottom-0 rounded">
+    <div id="header">
+      <div id="flex-item-left">
+        <img src="http://localhost:3000/logoUKR.png" alt="Logo"/>
+          <h2 id="session-name"><%= sessionNameUKR %></h2>
+      </div>
+      <div id="flex-item-right">
+        <span id="sciah" class="fi fi-<%= grandPrixFlag %>"></span>
+        <h5 id="gp-name"><%= grandPrixNameUKR %></h5>
+      </div>
+    </div>
+
+    <table class="table caption-top table-dark  table-striped rounded-left table-sm">
+      <thead class="fs-5">
+        <tr>
+          <th scope="col" class="col-pos"></th>
+          <th scope="col" class="col-driver text-body-secondary">Гонщик</th>
+          <th scope="col" class="col-quali text-center text-body-secondary">Q1</th>
+          <th scope="col" class="col-quali text-center text-body-secondary">Q2</th>
+          <th scope="col" class="col-quali text-center text-body-secondary">Q3</th>
+          <th scope="col" class="col-gap   text-center text-body-secondary">Відрив</th>
+          <th scope="col" class="col-laps  text-center text-body-secondary">Кіл</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider fs-4">
+          <% for(var i = 0; i < drivers.length; i++) { %>
+        <tr>
+          <td class="text-center number-font"><%= (i + 1) %></td>
+          <td class="driver-name">
+            <img src="http://localhost:3000/teams-2024/<%= drivers[i].teamId %>.png" alt="T">
+            <span class="big-text"><%= drivers[i].nameUKR %></span>
+          </td>
+          <td class="text-center number-font"><%= drivers[i].bestLapTimeQ1 %></td>
+          <td class="text-center number-font"><%= drivers[i].bestLapTimeQ2 %></td>
+          <td class="text-center number-font"><%= drivers[i].bestLapTimeQ3 %></td>
+          <td class="text-center number-font gap-cell"><%= drivers[i].gap %></td>
+          <td class="text-center number-font"><%= drivers[i].laps %></td>
+        </tr>
+          <% } %>
+      </tbody>
+    </table>
+  </div>
+    <div class="container-fluid">
+      <h4 class="text-center">
+        <span class="text-body-secondary">Formuła Pieramohi   </span><i class="fa fa-telegram"></i>
+        <span class="text-body-secondary"> t.me/<b>formula_pieramohi</b></span>
+      </h4>
+    </div>
+  </div>
+</body>
+</html>

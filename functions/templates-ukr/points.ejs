@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>FP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<link href="https://fonts.googleapis.com/css?family=Fredoka" rel="stylesheet">-->
+  <!--<link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet">-->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.1.0/css/flag-icons.min.css"/>
+  <%-
+        '<style>'
+        + include(`./../public/bootstrap.min.css`)
+        + include(`./../public/my-style.css`)
+        + '</style>'
+  %>
+</head>
+<body data-bs-theme="dark">
+<div id="parent-container" class="">
+  <div class="container-fluid pt-3 border border-white border-bottom-0 rounded">
+    <div id="header">
+      <div id="flex-item-left">
+        <img src="http://localhost:3000/logo.png" alt="Logo"/>
+        <h1><%= sessionName %></h1>
+      </div>
+      <div id="flex-item-right">
+        <span id="sciah" class="fi fi-bh"></span>
+        <h3>ГП Бахрэйну</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class=" table-responsive col-6"><!--pe-0-->
+        <table class="table caption-top table-dark  table-striped rounded-left table-sm">
+            <thead class="fs-5">
+                <tr>
+                  <th scope="col" class="col-1"></th>
+                  <th scope="col" class="col-1">Паз.</th>
+                  <th scope="col" class="col-8 text-body-secondary">Гоншчык</th>
+                  <th scope="col" class="col-1 text-center text-body-secondary">Прырост</th>
+                  <th scope="col" class="col-1 text-center text-body-secondary">Ачкоў</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider fs-4">
+          <% for(var i = 0; i < drivers.length; i++) { %>
+                <tr>
+                  <td class="text-center">-</td>
+                  <td class="text-center number-font"><%= (i + 1) %></td>
+                  <td class="driver-name">
+                    <img src="http://localhost:3000/teams-2024/<%= drivers[i].teamId %>.png" alt="T">
+                    <span class="big-text"><%= drivers[i].name %></span>
+                  </td>
+                  <td class="text-center number-font"><%= drivers[i].gain %></td>
+                  <td class="text-center number-font"><%= drivers[i].points %></td>
+                </tr>
+          <% } %>
+            </tbody>
+        </table>
+    </div>
+
+      <div class=" table-responsive col-6"><!--ps-0-->
+        <table class="table caption-top table-dark  table-striped rounded-left table-sm">
+          <thead class="fs-5">
+            <tr>
+
+              <th scope="col" class="col-1"></th>
+              <th scope="col" class="col-1">Паз.</th>
+              <th scope="col" class="col-8 text-body-secondary">Каманда</th>
+              <th scope="col" class="col-1 text-center text-body-secondary">Прырост</th>
+              <th scope="col" class="col-1 text-center text-body-secondary">Ачкоў</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider fs-4">
+          <% for(var i = 0; i < drivers.length; i++) { %>
+            <tr>
+              <!--<td class="text-center number-font"><%= (i + 1) %></td>-->
+              <!--<td class="text-center"></td>-->
+          <!--<td class="big-text driver-name">-->
+          <!--  <span class="driver-number"><%= (i + 1) %></span>-->
+          <!--  <img src="http://localhost:3000/teams-2024/<%= drivers[i].teamId %>.png" alt="T">-->
+          <!--      <%= drivers[i].name %>-->
+          <!--</td>-->
+          <!--<td class="text-center number-font"><%= drivers[i].bestLapTimeQ1 %></td>-->
+              <td class="text-center number-font"><%= drivers[i].bestLapTimeQ2 %></td>
+              <td class="text-center number-font"><%= drivers[i].bestLapTimeQ3 %></td>
+              <td class="text-center number-font"><%= drivers[i].gap %></td>
+              <td class="text-center number-font"><%= drivers[i].laps %></td>
+            </tr>
+          <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
