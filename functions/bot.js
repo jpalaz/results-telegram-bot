@@ -482,19 +482,19 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'))
 // Assume we have an active session after 5 messages
 let active;
 
-setInterval(() => {
-        active = messageCount > 5;
-        wss.clients.forEach((s) => {
-            if (s.readyState === ws.OPEN) {
-                s.send(active ? JSON.stringify(state) : "{}", {
-                    binary: false,
-                });
-            }
-        });
-    }, socketFreq);
-
 async function startStream() {
     await setupStream(wss);
+
+    setInterval(() => {
+            active = messageCount > 5;
+            wss.clients.forEach((s) => {
+                if (s.readyState === ws.OPEN) {
+                    s.send(active ? JSON.stringify(state) : "{}", {
+                        binary: false,
+                    });
+                }
+            });
+        }, socketFreq);
 }
 
 exports.handler = async event => {
@@ -507,6 +507,9 @@ exports.handler = async event => {
     }
 }
 
+console.log(`Starting bot...`)
 bot.launch()
+
+console.log(`Starting streaming...`)
 startStream()
 console.log(`Results app started`)
