@@ -1,10 +1,9 @@
 const puppeteer = require('puppeteer')
-const express = require('express')
-const bodyParser = require('body-parser')
 const ejs = require("ejs")
 const ws = require("ws")
 const zlib = require("zlib")
 const { Telegraf, Input } = require('telegraf')
+const { message } = require('telegraf/filters')
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -172,7 +171,7 @@ function prepareData(type, qualiSegment = 0) {
     }
 
     console.log("fastest lap: " + fastestLap + ", fastest: " + lines[fastestPosition].nameBLR)
-    console.log(lines)
+    console.log(lines[0])
     const currentRound = extractCurrentRound()
     return {
         drivers: lines,
@@ -191,7 +190,7 @@ async function convert(sessionType, requestBody, qualiSegment = 0) {
     const sessionData = prepareData(sessionType.template, qualiSegment);
     sessionData.sessionNameBLR = sessionType.nameBLR
     sessionData.sessionNameUKR = sessionType.nameUKR
-    let templateFolder = "templates"
+    let templateFolder = "functions/templates"
     if (requestBody.language === "UKR") {
         templateFolder += "-ukr"
     }
@@ -241,50 +240,9 @@ function timeConverter(UNIX_timestamp) {
         + withLeadingZero(hour) + '-'  + withLeadingZero(min) + '-'  + withLeadingZero(sec)
 }
 
-const app = express()
-const port = 3000
-app.use(bodyParser.json())
-app.use(express.static('public'))
-
 function sendImage(res, png) {
     return res.contentType("image/png").send(png);
 }
-
-app.post('/q1', (req, res) => {
-    convert(sessionTypes.q1, req.body)
-        .then(png => sendImage(res, png))
-})
-
-app.post('/q2', (req, res) => {
-    convert(sessionTypes.q2, req.body)
-        .then(png => sendImage(res, png))
-})
-
-app.post('/q3', (req, res) => {
-    convert(sessionTypes.q3, req.body)
-        .then(png => sendImage(res, png))
-})
-
-app.post('/race', (req, res) => {
-    convert(sessionTypes.race, req.body)
-        .then(png => sendImage(res, png))
-})
-
-app.post('/fp1', (req, res) => {
-    convert(sessionTypes.fp1, req.body)
-        .then(png => sendImage(res, png))
-})
-
-app.post('/fp2', (req, res) => {
-    convert(sessionTypes.fp2, req.body)
-        .then(png => sendImage(res, png))
-})
-
-app.post('/fp3', (req, res) => {
-    convert(sessionTypes.fp3, req.body)
-        .then(png => sendImage(res, png))
-})
-
 
 const signalrUrl = "livetiming.formula1.com/signalr";
 const signalrHub = "Streaming";
@@ -517,18 +475,14 @@ bot.command('reconnect', async (ctx) => {
     ctx.reply("Websocket connection restarted")
 })
 
-bot.launch()
-
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))
 
-app.listen(port, async () => {
+// Assume we have an active session after 5 messages
+let active;
 
-    // Assume we have an active session after 5 messages
-    let active;
-
-    setInterval(() => {
+setInterval(() => {
         active = messageCount > 5;
         wss.clients.forEach((s) => {
             if (s.readyState === ws.OPEN) {
@@ -537,8 +491,22 @@ app.listen(port, async () => {
                 });
             }
         });
-        }, socketFreq);
+    }, socketFreq);
 
+async function startStream() {
     await setupStream(wss);
-    console.log(`Converter app listening on port ${port}`)
-})
+}
+
+exports.handler = async event => {
+    try {
+        await bot.handleUpdate(JSON.parse(event.body))
+        return { statusCode: 200, body: "" }
+    } catch (e) {
+        console.error("error in handler:", e)
+        return { statusCode: 400, body: "This endpoint is meant for bot and telegram communication" }
+    }
+}
+
+bot.launch()
+startStream()
+console.log(`Results app started`)
