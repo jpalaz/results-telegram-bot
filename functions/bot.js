@@ -186,8 +186,8 @@ async function convert(sessionType, requestBody, qualiSegment = 0) {
     const browser = await puppeteer.launch(
         {
             args: chromium.args,
-            defaultViewport: { width: 800, height: 600 },
-            executablePath: await chromium.executablePath(),
+            defaultViewport: { width: 2700, height: 2700 },
+            executablePath: process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath('/var/task/node_modules/@sparticuz/chromium/bin')),
             headless: chromium.headless,
             ignoreHTTPSErrors: true,
         })
