@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer-core')
 const ejs = require("ejs")
 const ws = require("ws")
 const zlib = require("zlib")
@@ -183,11 +183,12 @@ function prepareData(type, qualiSegment = 0) {
 }
 
 async function convert(sessionType, requestBody, qualiSegment = 0) {
+    chromium.setHeadlessMode = true
     const browser = await puppeteer.launch(
         {
             args: chromium.args,
             defaultViewport: { width: 2700, height: 2700 },
-            executablePath: process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath('/var/task/node_modules/@sparticuz/chromium/bin')),
+            executablePath: (await chromium.executablePath('/var/task/node_modules/@sparticuz/chromium/bin')),
             headless: chromium.headless,
             ignoreHTTPSErrors: true,
         })
