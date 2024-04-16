@@ -1,9 +1,10 @@
+const puppeteer = require('puppeteer')
 const ejs = require("ejs")
 const ws = require("ws")
 const zlib = require("zlib")
 const { Telegraf, Input } = require('telegraf')
 const { message } = require('telegraf/filters')
-const chromium = require('chrome-aws-lambda');
+const chromium = require('@sparticuz/chromium')
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -182,12 +183,14 @@ function prepareData(type, qualiSegment = 0) {
 }
 
 async function convert(sessionType, requestBody, qualiSegment = 0) {
-    const browser = await chromium.puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-    });
+    const browser = await puppeteer.launch(
+        {
+            args: chromium.args,
+            defaultViewport: { width: 800, height: 600 },
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless,
+            ignoreHTTPSErrors: true,
+        })
     const page = await browser.newPage()
 
     console.log("Мова: " + requestBody.language)
