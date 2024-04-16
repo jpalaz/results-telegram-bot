@@ -186,7 +186,7 @@ async function convert(sessionType, requestBody, qualiSegment = 0) {
     chromium.setHeadlessMode = true
     const browser = await puppeteer.launch(
         {
-            args: chromium.args,
+            args: [chromium.args, '--disable-dev-shm-usage'],
             defaultViewport: { width: 2700, height: 2700 },
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
