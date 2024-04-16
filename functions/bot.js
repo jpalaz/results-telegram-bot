@@ -188,7 +188,7 @@ async function convert(sessionType, requestBody, qualiSegment = 0) {
         {
             args: chromium.args,
             defaultViewport: { width: 2700, height: 2700 },
-            executablePath: (await chromium.executablePath('/var/task/node_modules/@sparticuz/chromium/bin')),
+            executablePath: await chromium.executablePath(),
             headless: chromium.headless,
             ignoreHTTPSErrors: true,
         })
