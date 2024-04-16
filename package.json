@@ -5,7 +5,7 @@
         "start": "node functions/bot.js"
     },
     "dependencies": {
-        "@sparticuz/chromium": "^123.0.1",
+        "chrome-aws-lambda": "^2.0.0",
         "body-parser": "^1.20.2",
         "ejs": "^3.1.9",
         "express": "^4.18.2",
@@ -13,7 +13,7 @@
         "http": "^0.0.1-security",
         "netlify-lambda": "^2.0.16",
         "path": "^0.12.7",
-        "puppeteer": "^21.7.0",
+        "puppeteer-core": "^22.6.5",
         "telegraf": "^4.16.3",
         "url": "^0.11.3",
         "ws": "^8.16.0",
