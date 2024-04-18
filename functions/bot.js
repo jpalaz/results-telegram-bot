@@ -186,7 +186,7 @@ async function convert(sessionType, requestBody, qualiSegment = 0) {
     chromium.setHeadlessMode = true
     const browser = await puppeteer.launch(
         {
-            args: [chromium.args, '--disable-dev-shm-usage'],
+            args: chromium.args,
             defaultViewport: { width: 2700, height: 2700 },
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
@@ -471,11 +471,15 @@ bot.command('q2', async (ctx) => {
         .then(sendImageToUser(ctx))
 })
 
+async function createAndSendScreenshots(ctx, sessionType, qualiSegment = 0) {
+    await convert(sessionType, {language: "BLR"}, qualiSegment)
+            .then(sendImageToUser(ctx))
+    await convert(sessionType, {language: "UKR"}, qualiSegment)
+            .then(sendImageToUser(ctx))
+}
+
 bot.command('q3', async (ctx) => {
-    await convert(sessionTypes.q3, {language: "BLR"}, 2)
-        .then(sendImageToUser(ctx))
-    await convert(sessionTypes.q3, {language: "UKR"}, 2)
-        .then(sendImageToUser(ctx))
+    await createAndSendScreenshots(ctx, sessionTypes.q3, 2);
 })
 
 bot.command('reconnect', async (ctx) => {
@@ -515,9 +519,10 @@ exports.handler = async event => {
     }
 }
 
-console.log(`Starting bot...`)
-bot.launch()
-
 console.log(`Starting streaming...`)
 startStream()
-console.log(`Results app started`)
+    .then(_ => {
+        console.log(`Starting bot...`)
+        bot.launch()
+            .then(_ => console.log(`Results Bot started`))
+    })
