@@ -510,7 +510,5 @@ async function startStream() {
 console.log(`Starting streaming...`)
 startStream()
     .then(_ => {
-        console.log(`Starting bot...`)
-        bot.launch()
-            .then(_ => console.log(`Results Bot started`))
+        console.log(`Results Bot started`)
     })
