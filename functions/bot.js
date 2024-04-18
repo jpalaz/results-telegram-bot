@@ -429,57 +429,55 @@ function sendImageToUser(ctx) {
     return screenshot => ctx.replyWithDocument({source: screenshot[0], filename: screenshot[1]});
 }
 
+async function createAndSendScreenshots(ctx, sessionType, qualiSegment = 0) {
+await convert(sessionType, {language: "BLR"}, qualiSegment)
+    .then(sendImageToUser(ctx))
+await convert(sessionType, {language: "UKR"}, qualiSegment)
+    .then(sendImageToUser(ctx))
+}
+
 bot.command('race', async (ctx) => {
-    await convert(sessionTypes.race, {language: "BLR"})
-        .then(sendImageToUser(ctx))
-    await convert(sessionTypes.race, {language: "UKR"})
-        .then(sendImageToUser(ctx))
+    await createAndSendScreenshots(ctx, sessionTypes.race)
+})
+
+bot.command('sprint', async (ctx) => {
+    await createAndSendScreenshots(ctx, sessionTypes.sprint)
 })
 
 bot.command('fp1', async (ctx) => {
-    await convert(sessionTypes.fp1, {language: "BLR"})
-        .then(sendImageToUser(ctx))
-    await convert(sessionTypes.fp1, {language: "UKR"})
-        .then(sendImageToUser(ctx))
+    await createAndSendScreenshots(ctx, sessionTypes.fp1)
 })
 
 bot.command('fp2', async (ctx) => {
-    await convert(sessionTypes.fp2, {language: "BLR"})
-        .then(sendImageToUser(ctx))
-    await convert(sessionTypes.fp2, {language: "UKR"})
-        .then(sendImageToUser(ctx))
+    await createAndSendScreenshots(ctx, sessionTypes.fp2)
 })
 
 bot.command('fp3', async (ctx) => {
-    await convert(sessionTypes.fp3, {language: "BLR"})
-        .then(sendImageToUser(ctx))
-    await convert(sessionTypes.fp3, {language: "UKR"})
-        .then(sendImageToUser(ctx))
+    await createAndSendScreenshots(ctx, sessionTypes.fp3)
 })
 
 bot.command('q1', async (ctx) => {
-    await convert(sessionTypes.q1, {language: "BLR"}, 0)
-        .then(sendImageToUser(ctx))
-    await convert(sessionTypes.q1, {language: "UKR"}, 0)
-        .then(sendImageToUser(ctx))
+    await createAndSendScreenshots(ctx, sessionTypes.q1, 0)
 })
 
 bot.command('q2', async (ctx) => {
-    await convert(sessionTypes.q2, {language: "BLR"}, 1)
-        .then(sendImageToUser(ctx))
-    await convert(sessionTypes.q2, {language: "UKR"}, 1)
-        .then(sendImageToUser(ctx))
+    await createAndSendScreenshots(ctx, sessionTypes.q2, 1)
 })
 
-async function createAndSendScreenshots(ctx, sessionType, qualiSegment = 0) {
-    await convert(sessionType, {language: "BLR"}, qualiSegment)
-            .then(sendImageToUser(ctx))
-    await convert(sessionType, {language: "UKR"}, qualiSegment)
-            .then(sendImageToUser(ctx))
-}
-
 bot.command('q3', async (ctx) => {
-    await createAndSendScreenshots(ctx, sessionTypes.q3, 2);
+    await createAndSendScreenshots(ctx, sessionTypes.q3, 2)
+})
+
+bot.command('sq1', async (ctx) => {
+    await createAndSendScreenshots(ctx, sessionTypes.sq1, 0)
+})
+
+bot.command('sq2', async (ctx) => {
+    await createAndSendScreenshots(ctx, sessionTypes.sq2, 1)
+})
+
+bot.command('sq3', async (ctx) => {
+    await createAndSendScreenshots(ctx, sessionTypes.sq3, 2)
 })
 
 bot.command('reconnect', async (ctx) => {
