@@ -431,10 +431,15 @@ function sendImageToUser(ctx) {
 }
 
 async function createAndSendScreenshots(ctx, sessionType, qualiSegment = 0) {
-    await convert(sessionType, {language: "BLR"}, qualiSegment)
-        .then(sendImageToUser(ctx))
-    await convert(sessionType, {language: "UKR"}, qualiSegment)
-        .then(sendImageToUser(ctx))
+    try {
+        await convert(sessionType, {language: "BLR"}, qualiSegment)
+            .then(sendImageToUser(ctx))
+        await convert(sessionType, {language: "UKR"}, qualiSegment)
+            .then(sendImageToUser(ctx))
+    } catch (err) {
+        console.log(`Error: ${err.message}`)
+    }
+
 }
 
 bot.command('race', async (ctx) => {
