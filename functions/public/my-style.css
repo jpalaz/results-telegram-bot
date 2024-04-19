@@ -22,6 +22,10 @@ body {
 /*    background-color: #0d0534;*/
 }
 
+#header-blue {
+    background-color: #060045;
+}
+
 #flex-item-left {
     width: 60%;
     

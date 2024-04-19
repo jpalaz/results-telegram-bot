@@ -5,6 +5,7 @@ const zlib = require("zlib")
 const { Telegraf, Input } = require('telegraf')
 const { message } = require('telegraf/filters')
 const chromium = require('@sparticuz/chromium')
+const express = require('express')
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -430,10 +431,10 @@ function sendImageToUser(ctx) {
 }
 
 async function createAndSendScreenshots(ctx, sessionType, qualiSegment = 0) {
-await convert(sessionType, {language: "BLR"}, qualiSegment)
-    .then(sendImageToUser(ctx))
-await convert(sessionType, {language: "UKR"}, qualiSegment)
-    .then(sendImageToUser(ctx))
+    await convert(sessionType, {language: "BLR"}, qualiSegment)
+        .then(sendImageToUser(ctx))
+    await convert(sessionType, {language: "UKR"}, qualiSegment)
+        .then(sendImageToUser(ctx))
 }
 
 bot.command('race', async (ctx) => {
@@ -489,26 +490,32 @@ bot.command('reconnect', async (ctx) => {
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))
 
-// Assume we have an active session after 5 messages
-let active;
+const app = express()
+const port = process.env.PORT || 4000
+app.use(express.static('public'))
 
-async function startStream() {
-    await setupStream(wss);
+
+app.get('/health', (req, res) => {
+    res.sendStatus(200)
+})
+
+app.listen(port, async () => {
+
+    // Assume we have an active session after 5 messages
+    let active;
 
     setInterval(() => {
-            active = messageCount > 5;
-            wss.clients.forEach((s) => {
-                if (s.readyState === ws.OPEN) {
-                    s.send(active ? JSON.stringify(state) : "{}", {
-                        binary: false,
-                    });
-                }
-            });
+        active = messageCount > 5;
+        wss.clients.forEach((s) => {
+            if (s.readyState === ws.OPEN) {
+                s.send(active ? JSON.stringify(state) : "{}", {
+                    binary: false,
+                });
+            }
+        });
         }, socketFreq);
-}
 
-console.log(`Starting streaming...`)
-startStream()
-    .then(_ => {
-        console.log(`Results Bot started`)
-    })
+    console.log(`Starting streaming...`)
+    await setupStream(wss);
+    console.log(`Results bot started and is listening on port ${port}`)
+})
