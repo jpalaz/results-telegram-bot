@@ -517,5 +517,7 @@ app.listen(port, async () => {
 
     console.log(`Starting streaming...`)
     await setupStream(wss);
+    console.log(`Streaming is setup. Launching bot`)
+    await bot.launch()
     console.log(`Results bot started and is listening on port ${port}`)
 })
